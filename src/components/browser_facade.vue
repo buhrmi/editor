@@ -1,22 +1,24 @@
 <template lang="pug">
-  .browser_facade.facade-minimal
+  .browser_facade
 </template>
 
 <style media="screen" lang="less" scoped>
 
-.facade-minimal {
+.browser_facade {
 position:  relative;
-margin:  24px 0 0;
+// margin:  24px 0 0;
 padding:  56px 16px 0px 16px;
 box-shadow:  0px 5px 10px rgba(0,0,0,0.1);
 font-family: sans-serif;
 color:#454545;
 border-radius:3px;
 overflow-x:hidden;
+opacity: 1;
+transition: all 0.3s;
 }
 
 
-.facade-minimal:before
+.browser_facade:before
 {
 	content:  "";
 	position:  absolute;
@@ -33,7 +35,7 @@ overflow-x:hidden;
 			#e8e8e8;
 }
 
-.facade-minimal:after
+.browser_facade:after
 {
 	content:  attr(data-url);
 	position:  absolute;
