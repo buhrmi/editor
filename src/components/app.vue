@@ -13,13 +13,13 @@
 ######## TODO: Placeholder for data from API #####################
 card1 = 
   id: 1
-  template: '<p>Title: {{ card.title }}</p><p>Content: {{ card.content }}</p>'
+  template: '<div class="card">Title: {{ card.title }}</p><p>Content: {{ card.content }}</div>'
   data:
     title: "This is a card title"
     content: "This is card content"
 card2 =
   id: 2
-  template: '<p>Title: {{ card.title }}</p><p>Content: {{ card.content }}</p>'
+  template: '<div class="card">Title: {{ card.title }}</p><p>Content: {{ card.content }}</div>'
   schema:
     title:
       type: 'text'
@@ -34,7 +34,7 @@ card2 =
 page1 =
   id: 1
   cards: [card1, card2]
-  template: '<html><head><title>{{ page.title }}</title></head><body><h1>This is blueprint text</h1><div id="content">{{ content }}</div><footer>This is the footer</footer></body></html>'
+  template: '<html><head><style>.card {padding: 40px;}</style><title>{{ page.title }}</title></head><body><h1>This is blueprint text</h1><div id="content">{{ content }}</div><footer>This is the footer</footer></body></html>'
   data:
     title: 'Woot'
     

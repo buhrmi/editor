@@ -2,9 +2,10 @@
   .editor(v-bind:class="{previewing: previewing}")
     .menu
       a.toggle_button(@click="togglePreview") {{ previewing ? 'Edit' : 'Preview' }}
-    .preview_wrapper(@mousemove="updatedHoveredElement")
+    .preview_wrapper(@mousemove="updatedHoveredElement" @click="selectHoveredElement")
       browser-facade
       iframe#page
+    inspector(v-show="!previewing" v-bind:hovered-element="hoveredElement" v-bind:selected-element="selectedElement")
 </template>
 
 <style media="screen" lang="less" scoped>
@@ -74,6 +75,7 @@
   module.exports =
     components:
       BrowserFacade: require('./browser_facade.vue')
+      Inspector: require('./inspector.vue')
     props: [
       'site'
     ]
@@ -81,17 +83,12 @@
       currentPage: ->
         this.site.pages[0]
     data: ->
-      previewing: true
-      appName: 'Qurate Cloud Site Editor'
+      previewing: false
+      appName: 'Qurate Cloud Editor'
       hoveredElement: null
+      selectedElement: null
     ready: ->
       this.renderPage()
-    watch: 
-      hoveredElement: (newElement, oldElement) ->
-        console.log('hovering ', newElement, oldElement)
-        oldElement.classList.remove('hovered') if oldElement
-        return unless newElement
-        newElement.classList.add('hovered')
     methods: 
       renderPage: ->
         pageElement = document.getElementById('page')
@@ -103,7 +100,7 @@
         for card in this.currentPage.cards
           cardLiquid = Liquid.parse(card.template)
           cardHTML = cardLiquid.render({card: card.data, page: pageData})
-          contentHTML += cardHTML + separator
+          contentHTML += "<div class='__card' data-id='#{card.id}'>" + cardHTML + '</div>' + separator
         blueprintTemplate = this.currentPage.template
         blueprintLiquid = Liquid.parse(blueprintTemplate)
         renderedHTML = blueprintLiquid.render({page: pageData, content: contentHTML})
@@ -111,22 +108,35 @@
         pageDoc.getElementsByTagName('html')[0].innerHTML = renderedHTML
         document.title = pageDoc.title
         page.style.height = pageDoc.body.scrollHeight + 'px'
-      updatedHoveredElement: (event) ->
-        
+      
+      
+      updatedHoveredElement: (event) ->  
         pageDoc = document.getElementById('page').contentDocument
+        mousePageY = event.clientY - document.getElementById('page').getBoundingClientRect().top
+        mousePageX = event.clientX - document.getElementById('page').getBoundingClientRect().left
         separators = pageDoc.getElementsByClassName('__card_separator')
-        pageY = event.clientY - document.getElementById('page').getBoundingClientRect().top
-        pageX = event.clientX - document.getElementById('page').getBoundingClientRect().left
         for separator in separators
-          y = separator.getBoundingClientRect().top
-          if Math.abs(y - pageY) < 10
+          top = separator.getBoundingClientRect().top
+          if Math.abs(top - mousePageY) < 10
             return this.hoveredElement = separator
+        cards = pageDoc.getElementsByClassName('__card')
+        for card in cards
+          top = card.getBoundingClientRect().top
+          bottom = top + card.getBoundingClientRect().height
+          if mousePageY > top && mousePageY < bottom
+            return this.hoveredElement = card
+        
         
         this.hoveredElement = null
-        
+      
+      selectHoveredElement: (event) ->
+        this.selectedElement = this.hoveredElement
+          
       hidePageElements: ->
         true
+        
       togglePreview: ->
         this.previewing = !this.previewing
+        this.hoveredElement = null if this.previewing
         
 </script>
