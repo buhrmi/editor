@@ -1,6 +1,10 @@
 # Qurate Editor
 
-This is the Qurate Editor. Get crackin. Change the world.
+This is a website editor prototype. Get crackin. Change the world.
+
+## Install
+
+    $ npm install
 
 ## Run locally
 
