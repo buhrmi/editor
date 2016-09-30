@@ -6,10 +6,18 @@ This is a website editor prototype. Get crackin. Change the world.
 
     $ npm install
 
-## Run locally
+## Run development server
 
     $ npm run dev
-    
+
+## Run backend server
+
+    $ npm rum server
+
 ## Build
 
     $ npm run build
+
+## Deploy
+
+    no clue yet
