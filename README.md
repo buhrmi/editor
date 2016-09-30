@@ -12,7 +12,7 @@ This is a website editor prototype. Get crackin. Change the world.
 
 ## Run backend server
 
-    $ npm rum server
+    $ npm run server
 
 ## Build
 
