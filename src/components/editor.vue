@@ -72,10 +72,16 @@
 </style>
 
 <script lang="coffee">
+
+  VueSync = require('vue-sync')
+  websocket = VueSync.websocketStrategy('ws://localhost:8000')
+
   module.exports =
     components:
       BrowserFacade: require('./browser_facade.vue')
       Inspector: require('./inspector.vue')
+    sync:
+      previewing: websocket()
     props: [
       'site'
     ]

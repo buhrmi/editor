@@ -7,6 +7,8 @@
 <template lang="pug">
   .app
     editor(v-bind:site="site")
+  p message is {{ message }}
+  a(@click="message = 'hi'") Change to hi
 </template>
 
 <script lang="coffee">
@@ -42,12 +44,16 @@ site =
   id: 1
   pages: [page1]
 ######################################################################
-    
+VueSync = require('vue-sync')
+websocket = VueSync.websocketStrategy('ws://localhost:8000')
 
 module.exports =
   components:
     Editor: require('./editor.vue')
   data: ->
     site: site
+    message: 'hello'
+  sync:
+    message: websocket()
         
 </script>
