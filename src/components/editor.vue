@@ -5,6 +5,7 @@
     .preview_wrapper(@mousemove="updatedHoveredElement" @click="selectHoveredElement")
       browser-facade
       iframe#page
+    input(v-model='site.pages[0].data.title')
     inspector(v-show="!previewing" v-bind:hovered-element="hoveredElement" v-bind:selected-element="selectedElement")
 </template>
 
@@ -73,15 +74,10 @@
 
 <script lang="coffee">
 
-  VueSync = require('vue-sync')
-  websocket = VueSync.websocketStrategy('ws://localhost:8000')
-
   module.exports =
     components:
       BrowserFacade: require('./browser_facade.vue')
       Inspector: require('./inspector.vue')
-    sync:
-      previewing: websocket()
     props: [
       'site'
     ]
@@ -90,10 +86,9 @@
         this.site.pages[0]
     data: ->
       previewing: false
-      appName: 'Qurate Cloud Editor'
       hoveredElement: null
       selectedElement: null
-    ready: ->
+    mounted: ->
       this.renderPage()
     methods: 
       renderPage: ->

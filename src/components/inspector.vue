@@ -17,7 +17,6 @@ module.exports =
   
   watch: 
     selectedElement: (newElement, oldElement) ->
-      console.log('derp')
       return unless newElement
       
       if newElement.classList.contains('__card')

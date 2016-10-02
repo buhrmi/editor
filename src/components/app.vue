@@ -7,8 +7,7 @@
 <template lang="pug">
   .app
     editor(v-bind:site="site")
-  p message is {{ message }}
-  a(@click="message = 'hi'") Change to hi
+    p site.pages[0].data.title is {{ site.pages[0].data.title }}
 </template>
 
 <script lang="coffee">
@@ -52,8 +51,7 @@ module.exports =
     Editor: require('./editor.vue')
   data: ->
     site: site
-    message: 'hello'
   sync:
-    message: websocket()
+    'site': websocket()
         
 </script>
