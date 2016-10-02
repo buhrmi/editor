@@ -1,28 +1,36 @@
 <template lang="pug">
   .editor(v-bind:class="{previewing: previewing}")
     .menu
+      .site Current Page: {{ currentPage.data.title }}
       a.toggle_button(@click="togglePreview") {{ previewing ? 'Edit' : 'Preview' }}
     .preview_wrapper(@mousemove="updatedHoveredElement" @click="selectHoveredElement")
-      browser-facade
+      browser-facade(v-bind:page="currentPage")
       iframe#page
-    input(v-model='site.pages[0].data.title')
-    inspector(v-show="!previewing" v-bind:hovered-element="hoveredElement" v-bind:selected-element="selectedElement")
+    inspector(v-show="!previewing" v-bind:hovered-element="hoveredElement" v-bind:selected-element="selectedElement" v-bind:page="currentPage")
 </template>
 
 <style media="screen" lang="less" scoped>
+  .editor {
+    height: ~"calc(100% - 62px)";
+    overflow: auto;
+    transition: all 0.3s;
+    top: 62px;
+    position: relative;
+  }
   .preview_wrapper {
     // width: 100%;
-    margin: 100px 60px;
+    margin: 0px 60px;
     // transform: scale(0.8);
     transition: all 0.3s;
     position: relative;
-    // margin-top: 60px;
+    top: 30px;
+    height: 100%;
   }
 
   .menu {
-    height: 30px;
-    box-shadow:  0px 5px 10px rgba(0,0,0,0.1);
-    padding: 16px;
+    height: 62px;
+    box-shadow:  0px 5px 10px rgba(0,0,0,0.3);
+    padding: 10px;
     background-color: white;
     position: fixed;
     transition: all 0.3s;
@@ -45,23 +53,32 @@
     border: none;
     width: 100%;
     position: relative;
-    box-shadow:  0px 5px 10px rgba(0,0,0,0.1);
+    box-shadow:  0px 5px 10px rgba(0,0,0,0.3);
     background: white;
     top: 0;
     transition: all 0.3s;
+    min-height: 0%;
+    overflow: none;
   }
   .editor.previewing {
+    margin-top: 0px;
+    top: 0px;
+    height: ~"calc(100% - 0px)";
+    overflow: hidden;
     .browser_facade {
       opacity: 0;
+      padding: 0px 16px 0px 16px;
     }
     .preview_wrapper {
       transform: scale(1);
-      // width: 100%;
+      top: 0px;
       margin: 0;
     }
     #page {
-      top: -56px;
+      min-height: 100%;
       pointer-events: all;
+      overflow: auto;
+      height: 100% !important;
     }
     .menu {
       top: -62px;
@@ -90,6 +107,10 @@
       selectedElement: null
     mounted: ->
       this.renderPage()
+    watch:
+      'site':
+        handler: -> this.renderPage()
+        deep: true
     methods: 
       renderPage: ->
         pageElement = document.getElementById('page')
@@ -104,10 +125,9 @@
           contentHTML += "<div class='__card' data-id='#{card.id}'>" + cardHTML + '</div>' + separator
         blueprintTemplate = this.currentPage.template
         blueprintLiquid = Liquid.parse(blueprintTemplate)
-        renderedHTML = blueprintLiquid.render({page: pageData, content: contentHTML})
-        # renderedPage = blueprintHTML.replace('{{ yield }}', cardHTML + cardHTML) # TODO: make it real
+        renderedHTML = blueprintLiquid.render({page: pageData, content: contentHTML, cards: (card.data for card in this.currentPage.cards)})
         pageDoc.getElementsByTagName('html')[0].innerHTML = renderedHTML
-        document.title = pageDoc.title
+        document.title = pageDoc.title + ' | Editor'
         page.style.height = pageDoc.body.scrollHeight + 'px'
       
       

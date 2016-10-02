@@ -1,13 +1,13 @@
 <style media="screen" lang="less">
   .app {
-    
+    height: 100%;
+    // overflow: auto;
   }
 </style>
 
 <template lang="pug">
   .app
     editor(v-bind:site="site")
-    p site.pages[0].data.title is {{ site.pages[0].data.title }}
 </template>
 
 <script lang="coffee">
@@ -15,6 +15,13 @@
 card1 = 
   id: 1
   template: '<div class="card">Title: {{ card.title }}</p><p>Content: {{ card.content }}</div>'
+  schema:
+    title:
+      type: 'text'
+    content:
+      type: 'html'
+    background:
+      type: 'image'
   data:
     title: "This is a card title"
     content: "This is card content"
@@ -35,9 +42,10 @@ card2 =
 page1 =
   id: 1
   cards: [card1, card2]
+  # cards: [card1, card2,card2,card2,card2,card2,card2,card2]
   template: '<html><head><style>.card {padding: 40px;}</style><title>{{ page.title }}</title></head><body><h1>This is blueprint text</h1><div id="content">{{ content }}</div><footer>This is the footer</footer></body></html>'
   data:
-    title: 'Woot'
+    title: 'My Site'
     
 site =
   id: 1
