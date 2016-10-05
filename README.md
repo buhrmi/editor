@@ -1,6 +1,6 @@
-# Qurate Editor
+# Website Builder
 
-This is a website editor prototype. Get crackin. Change the world.
+This is a website builder prototype. Just having fun.
 
 ## Install
 
