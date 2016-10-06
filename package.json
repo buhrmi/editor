@@ -1,7 +1,7 @@
 {
-  "name": "quration",
+  "name": "quedit",
   "version": "0.0.1",
-  "description": "Quration",
+  "description": "Quedit",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,7 +21,7 @@
     "coffee-script": "*",
     "css-loader": "*",
     "less": "*",
-    "less-loader": "*",
+    "less-loader": "^2.2.3",
     "pug": "*",
     "vue": "*",
     "vue-hot-reload-api": "^2.0.6",
@@ -29,6 +29,8 @@
     "vue-loader": "*",
     "vue-style-loader": "*",
     "vue-sync": "*",
+    "vue-sync-server": "*",
+    "vuex": "^2.0.0",
     "webpack": "*",
     "webpack-dev-server": "*"
   }

@@ -1,8 +1,8 @@
 <template lang="pug">
-  .editor(v-bind:class="{previewing: previewing}")
+  .editor(v-bind:class="{previewing: previewing, editing_template: appState.editingTemplate}")
     .menu
+      a.preview_button.button(@click="togglePreview") {{ previewing ? 'Edit' : 'Preview' }}
       .site Current Page: {{ currentPage.data.title }}
-      a.toggle_button(@click="togglePreview") {{ previewing ? 'Edit' : 'Preview' }}
     .preview_wrapper(@mousemove="updatedHoveredElement" @click="selectHoveredElement")
       browser-facade(v-bind:page="currentPage")
       iframe#page
@@ -10,43 +10,68 @@
 </template>
 
 <style media="screen" lang="less" scoped>
+   @import '../globals.less';
+   
   .editor {
-    height: ~"calc(100% - 62px)";
     overflow: auto;
     transition: all 0.3s;
-    top: 62px;
-    position: relative;
+    position: absolute;
+    top: @menu-height;
+    bottom: 0;
+    left: 0;
+    right: @sidebar-width;
+    &.editing_template {
+      bottom: @template-editor-height;
+    }
   }
+  
   .preview_wrapper {
-    // width: 100%;
     margin: 0px 60px;
-    // transform: scale(0.8);
     transition: all 0.3s;
     position: relative;
     top: 30px;
-    height: 100%;
+    height: 100% - @menu-height;
   }
 
   .menu {
-    height: 62px;
+    height: @menu-height;
     box-shadow:  0px 5px 10px rgba(0,0,0,0.3);
-    padding: 10px;
-    background-color: white;
+    background-color: @menu-light-bg;
+    border-bottom: 1px solid @menu-dark-bg;
     position: fixed;
     transition: all 0.3s;
     top: 0;
-    width: 100%;
+    right: @sidebar-width;
+    left: 0;
     z-index: 1000;
-    .toggle_button {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      border: 1px solid black;
+    color: white;
+    
+    .preview_button {
+      border-left: 1px solid black;
       z-index: 1000;
-      padding: 8px 12px;
-      cursor: pointer;
-      background: white;
+      position: fixed;
+      right: @sidebar-width;
+      background-color: @menu-light-bg;
+      border-bottom: 1px solid @menu-dark-bg;
+      // transition: all 0.3s;
     }
+    
+    .button {
+      display: inline-block;
+      height: inherit;
+      padding: 14px 16px;
+      cursor: pointer;
+      top: 0;
+      &:hover {
+        // background-color: @menu-dark-bg;
+        color: #eee;
+      }
+    }
+    
+    a {
+      color: #bbb;
+    }
+  
   }
   #page {
     pointer-events: none;
@@ -65,14 +90,19 @@
     top: 0px;
     height: ~"calc(100% - 0px)";
     overflow: hidden;
+    right: 0;
     .browser_facade {
       opacity: 0;
       padding: 0px 16px 0px 16px;
     }
     .preview_wrapper {
-      transform: scale(1);
+      // transform: scale(1);
       top: 0px;
       margin: 0;
+      height: 100%;
+    }
+    .preview_button {
+      right: 0;
     }
     #page {
       min-height: 100%;
@@ -105,6 +135,7 @@
       previewing: false
       hoveredElement: null
       selectedElement: null
+      appState: AppState
     mounted: ->
       this.renderPage()
     watch:
@@ -120,10 +151,10 @@
         separator = '<div class="__card_separator"></div>'
         contentHTML = separator
         for card in this.currentPage.cards
-          cardLiquid = Liquid.parse(card.template)
+          cardLiquid = Liquid.parse(card.template.content)
           cardHTML = cardLiquid.render({card: card.data, page: pageData})
           contentHTML += "<div class='__card' data-id='#{card.id}'>" + cardHTML + '</div>' + separator
-        blueprintTemplate = this.currentPage.template
+        blueprintTemplate = this.currentPage.template.content
         blueprintLiquid = Liquid.parse(blueprintTemplate)
         renderedHTML = blueprintLiquid.render({page: pageData, content: contentHTML, cards: (card.data for card in this.currentPage.cards)})
         pageDoc.getElementsByTagName('html')[0].innerHTML = renderedHTML
