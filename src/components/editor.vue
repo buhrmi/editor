@@ -1,8 +1,9 @@
 <template lang="pug">
   .editor(v-bind:class="{previewing: previewing, editing_template: appState.editingTemplate}")
     .menu
-      a.preview_button.button(@click="togglePreview") {{ previewing ? 'Edit' : 'Preview' }}
-      .site Current Page: {{ currentPage.data.title }}
+      .site.button Current Page: {{ currentPage.data.title }}
+      .preview_button.button(@click="togglePreview")
+        span.fa(v-bind:class="{'fa-eye': !previewing, 'fa-edit': previewing}")
     .preview_wrapper(@mousemove="updatedHoveredElement" @click="selectHoveredElement")
       browser-facade(v-bind:page="currentPage")
       iframe#page
@@ -35,6 +36,7 @@
 
   .menu {
     height: @menu-height;
+    line-height: @menu-height;
     box-shadow:  0px 5px 10px rgba(0,0,0,0.3);
     background-color: @menu-light-bg;
     border-bottom: 1px solid @menu-dark-bg;
@@ -44,12 +46,13 @@
     right: @sidebar-width;
     left: 0;
     z-index: 1000;
-    color: white;
+    color: #ccc;
     
     .preview_button {
-      border-left: 1px solid black;
+      border: 1px solid black;
       z-index: 1000;
-      position: fixed;
+      // position: fixed;
+      display: inline-block;
       right: @sidebar-width;
       background-color: @menu-light-bg;
       border-bottom: 1px solid @menu-dark-bg;
@@ -59,9 +62,12 @@
     .button {
       display: inline-block;
       height: inherit;
-      padding: 14px 16px;
+      padding: 0 16px;
       cursor: pointer;
       top: 0;
+      .fa {
+        font-size: 22px;
+      }
       &:hover {
         // background-color: @menu-dark-bg;
         color: #eee;
@@ -103,6 +109,7 @@
     }
     .preview_button {
       right: 0;
+      position: fixed;
     }
     #page {
       min-height: 100%;

@@ -4,7 +4,10 @@
     .card(v-show="hoveredType == 'card'" v-bind:style="hoveredElementPositioning")
     .ui_window.inspector.docked
       .inspector_tabs
-        .tab_button.selected Data
+        .tab_button.selected Content
+        .tab_button Layout
+        .tab_button Data
+        .tab_button Assets
       .inspector_content(v-if="editingObject")
         .button(@click="appState.editingTemplate = editingObject.template") Edit Template
         .fields
@@ -146,9 +149,15 @@ module.exports =
       .tab_button {
         display: inline-block;
         height: @menu-height;
-        padding: 14px 20px;
+        padding: 0 20px;
+        font-size: 13px;
+        background: linear-gradient(#343434, #393939);
+        border-bottom: 1px solid @menu-dark-bg;
+        border-right: 1px solid @menu-dark-bg;
+        line-height: @menu-height;
         &.selected {
-          background-color: @menu-light-bg;
+          border-bottom: none;
+          background: @menu-light-bg;
         }
       }
     }
@@ -161,7 +170,6 @@ module.exports =
       width: 100%;
       border: 0;
       margin: 0;
-      background: transparent;
       color: #d6d6d6;
       -webkit-transition: color 0.05s ease;
       transition: color 0.05s ease;
