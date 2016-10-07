@@ -1,6 +1,8 @@
 # Website Builder
 
-This is a website builder prototype. Just having fun.
+This is a website builder prototype being built for entertainment purposes.
+
+Current progress [here](http://buhrmi.github.io/editor)
 
 ## Install
 
