@@ -14,12 +14,10 @@
 ######## TODO: Placeholder for data from API #####################
 template1 =
   id: 1
-  language: 'html'
-  content: '<html><head><style>.card {padding: 40px;}</style><title>{{ page.title }}</title></head><body><h1>This is blueprint text</h1><div id="content">{{ content }}</div><footer>This is the footer</footer></body></html>'
+  html: '<html><head><style>.card {padding: 40px;}</style><title>{{ page.title }}</title></head><body><h1>This is blueprint text</h1><div id="content">{{ content }}</div><footer>This is the footer</footer></body></html>'
 template2 =
   id: 2
-  language: 'html'
-  content: '<div class="card">Title: {{ card.title }}</p><p>Content: {{ card.content }}</div>'
+  html: '<div class="card">Title: {{ card.title }}</p><p>Content: {{ card.content }}</div>'
   
 card1 = 
   id: 1

@@ -1,5 +1,5 @@
 <template lang="pug">
-  .editor(v-bind:class="{previewing: previewing, editing_template: appState.editingTemplate}")
+  .editor(v-bind:class="{previewing: previewing, editing_template: appState.templateEditorOpen}")
     .menu
       .site.button Current Page: {{ currentPage.data.title }}
       .preview_button.button(@click="togglePreview")
@@ -158,10 +158,10 @@
         separator = '<div class="__card_separator"></div>'
         contentHTML = separator
         for card in this.currentPage.cards
-          cardLiquid = Liquid.parse(card.template.content)
+          cardLiquid = Liquid.parse(card.template.html)
           cardHTML = cardLiquid.render({card: card.data, page: pageData})
           contentHTML += "<div class='__card' data-id='#{card.id}'>" + cardHTML + '</div>' + separator
-        blueprintTemplate = this.currentPage.template.content
+        blueprintTemplate = this.currentPage.template.html
         blueprintLiquid = Liquid.parse(blueprintTemplate)
         renderedHTML = blueprintLiquid.render({page: pageData, content: contentHTML, cards: (card.data for card in this.currentPage.cards)})
         pageDoc.getElementsByTagName('html')[0].innerHTML = renderedHTML

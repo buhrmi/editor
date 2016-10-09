@@ -9,16 +9,15 @@
         .tab_button Data
         .tab_button Assets
       .inspector_content(v-if="editingObject")
-        .button(@click="appState.editingTemplate = editingObject.template") Edit Template
+        .button(@click="appState.templateEditorOpen = true") Open Template Editor
         .fields
           .field(v-for="(fieldDef, fieldName) in editingObject.schema")
             label {{ fieldName }}
             input(v-model="editingObject.data[fieldName]")
             span ({{ fieldDef['type'] }})
       .inspector_content(v-show="!editingObject") No Selection
-    .ui_window.template_editor.docked(v-show="appState.editingTemplate")
-      .title_bar Template
-      .button(@click="appState.editingTemplate = null") Close
+    .ui_window.template_editor.docked(v-show="appState.templateEditorOpen")
+      .button.close(@click="appState.templateEditorOpen = false") Close
       ace(v-bind:template="appState.editingTemplate")
 </template>
 
@@ -74,10 +73,12 @@ module.exports =
         return unless selectedCard
         
         this.editingObject = selectedCard
+        this.appState.editingTemplate = selectedCard.template
         this.inspectorTitle = 'Card Data'
       
       else
         this.editingObject = null
+        this.appState.editingTemplate = null
         this.inspectorTitle = 'Insert Card'
 
     hoveredElement: (newElement, oldElement) ->
@@ -123,7 +124,7 @@ module.exports =
     background: @menu-light-bg;
     // box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 17px -4px;
     // border-radius: 7px;
-    overflow: auto;
+    // overflow: auto;
     color: #ccc;
     &.inspector.docked {
       width: @sidebar-width;
@@ -160,6 +161,10 @@ module.exports =
           background: @menu-light-bg;
         }
       }
+    }
+    .button.close {
+      position: absolute;
+      bottom: 100%;
     }
     input {
       padding: 4px 4px;
