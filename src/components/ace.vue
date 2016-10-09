@@ -19,14 +19,13 @@ module.exports =
       editor.setOptions fontSize: "12pt"
       # editor.getSession().setMode("ace/mode/javascript");
       editor.getSession().setMode("ace/mode/html");
-      if this.appState.editingTemplate
-        editor.setValue( this.appState.editingTemplate.html)
+      if this.template
+        editor.setValue( this.template.html)
       editor.getSession().on 'change', =>
-        this.appState.editingTemplate.html = editor.getValue()
-        
-    'appState.editingTemplate': (newTemplate) ->
+        this.template.html = editor.getValue()
+         
+    template: (newTemplate) ->
       return unless editor && newTemplate
-      
       editor.setValue(newTemplate.html)
 </script>
 
